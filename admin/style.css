@@ -1,0 +1,27 @@
+.container{
+    width:1100px;
+    height: auto;
+
+}
+
+.cat{
+
+    width:500px;
+    height:500px;
+    margin:auto;
+    margin-top:20%;
+
+}
+#login_container{
+
+    width:500px;
+    height:500px;
+    margin:auto;
+    margin-top:20%;
+}
+.input_field{
+
+    width:300px;
+    height:40px;
+}
+
