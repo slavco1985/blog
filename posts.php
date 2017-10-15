@@ -1,6 +1,20 @@
 <?php
 
-$sql_posts = "SELECT * FROM posts ORDER BY post_id DESC";
+$page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+if (!$page) {
+    $page = 1;
+}
+
+$limit = 2;
+$offset = 0;
+
+if ($page > 0) {
+    $offset = ($page * $limit) - $limit;
+}
+
+
+
+$sql_posts = "SELECT * FROM posts ORDER BY post_id DESC LIMIT $limit OFFSET $offset";
 $result_posts = mysqli_query($con, $sql_posts);
 
 
@@ -9,7 +23,7 @@ while ($row_posts = mysqli_fetch_assoc($result_posts)) {
 
 
     $post_id = $row_posts['post_id'];
-    
+
     $post_name = $row_posts['post_name'];
     $post_name_sub = substr($post_name, 0, 80);
     $post_name_wrap = wordwrap($post_name_sub, 33, "\n", true);
@@ -47,6 +61,29 @@ while ($row_posts = mysqli_fetch_assoc($result_posts)) {
     echo" </div>";
     echo" </div>";
 }
+
+$query = "SELECT COUNT(post_id) as rows FROM posts ";
+
+$result = mysqli_query($con, $query);
+$contactCount = mysqli_fetch_assoc($result);
+$contactCount = $contactCount['rows'];
+
+$pages = ceil($contactCount / $limit);
+echo "<div id = \"pagi\">";
+if ($page > 1) {
+    echo '<a href="index.php?page=' . ($page - 1) . '">Prev</a> ';
+}
+for ($i = 1; $i <= $pages; $i++) {
+    if ($page == $i) {
+        echo $i . ' ';
+    } else {
+        echo '<a href="index.php?page=' . $i . '">' . $i . '</a> ';
+    }
+}
+if ($page < $pages) {
+    echo '<a href="index.php?page=' . ($page + 1) . '">Next</a> ';
+}
+echo "</div>";
 ?>
               
 
